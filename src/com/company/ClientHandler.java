@@ -15,74 +15,48 @@ public class ClientHandler extends Thread {
         this.in = in;
         this.out = out;
     }
-
     public void run() {
         System.out.println("Assigning a new Thread : "+Thread.currentThread().getId());
         try {
             byte[] data = new byte[in.available()];
+            FileName getfilename = new FileName();
+            FileContents filecontents = new FileContents();
+            Response response = new Response();
             in.read(data);
             String header = new String(data);
-            System.out.println("########");
+            System.out.println("#################");
             System.out.println(header);
-            System.out.println("########");
-            System.out.println("Closing connection");
+            System.out.println("#################");
             if (header.contains("GET")) {
                 System.out.println("GET request found");
-                String fileName = " ";
-                if(header.split(" ")[1].length() == 1)
-                {
-                    fileName = "Server.html";
-                }
-                else {
-                    fileName = header.split(" ")[1].split("/")[1];
-                }
+                String fileName = getfilename.getFileName(header);
                 System.out.println("File Required is : " + fileName);
                 if (new File(fileName).exists()) {
                     System.out.println("File Found :" + fileName);
-                    BufferedReader reader = new BufferedReader(new FileReader(fileName));
-                    String contents = "";
-                    String str = "";
-                    while ((str = reader.readLine()) != null) {
-                        contents += str;
-                    }
+                    String contents = filecontents.getFileContents(fileName);
                     System.out.println("Contents of file are: " + contents);
-
-                    String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contents; //ok response
-                    out.write(httpResponse.getBytes("UTF-8"));
-                    out.flush();
-                } else {
+                    response.getResponse(contents,out);
+                } else{
                     System.out.println("File Not Found : " + fileName);
                     fileName = "Error.html";
-                    BufferedReader reader = new BufferedReader(new FileReader(fileName));
-                    String contents = "";
-                    String str = "";
-                    while ((str = reader.readLine()) != null) {
-                        contents += str;
-                    }
+                    String contents = filecontents.getFileContents(fileName);
                     System.out.println("Contents of file are: " + contents);
-                    String httpResponse = "HTTP/1.1 200 OK\r\n\r\n" + contents; //ok response
-                    out.write(httpResponse.getBytes("UTF-8"));
-                    out.flush();
+                    response.getResponse(contents,out);
                 }
-
-            } else {
+            }else{
                 System.out.println("GET request not found !");
-
             }
-        } catch (UnsupportedEncodingException e) {
+        }catch(FileNotFoundException e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }catch(IOException e) {
             e.printStackTrace();
         }
-        try {
+        try{
             in.close();
             out.close();
             socket.close();
-        } catch (IOException e) {
+        }catch(IOException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -7,9 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-
-    private Socket socket   = null;
-    private ServerSocket server   = null;
+    private Socket socket = null;
+    private ServerSocket server  = null;
     private BufferedInputStream in  =  null;
     private BufferedOutputStream out = null;
     // constructor with port
@@ -27,10 +26,7 @@ public class Server {
             t.start();
         }
     }
-
     public static void main(String args[]) throws IOException {
         Server server = new Server(8080);
-
-
     }
 }
