@@ -16,7 +16,7 @@ public class ClientHandler extends Thread {
         this.out = out;
     }
     public void run() {
-        System.out.println("Assigning a new Thread : "+Thread.currentThread().getId());
+        System.out.println("Assigning a new Thread :"+Thread.currentThread().getId());
         try {
             byte[] data = new byte[in.available()];
             FileName getfilename = new FileName();
