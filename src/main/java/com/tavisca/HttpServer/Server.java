@@ -5,9 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public class Server
 {
@@ -19,14 +17,16 @@ public class Server
     public Server(int port) throws IOException {
         server = new ServerSocket(port);
     }
-
     public void beginProcess() throws IOException {
-        LogManager lgmngr = LogManager.getLogManager();
-        Logger log = lgmngr.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        log.log(Level.INFO,"Server started");
+        Logger log = Logger.getLogger("Server");
+        FileHandler fh = new FileHandler("Server.log");
+        log.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();
+        fh.setFormatter(formatter);
+        log.info("Server started");
         // starts server and waits for a connection
         while(true) {
-            log.log(Level.INFO,"Waiting for a client ...");
+            log.info("Waiting for a client ...");
             socket = server.accept();
             log.log(Level.INFO,"Client accepted");
             input = new BufferedInputStream(socket.getInputStream());
@@ -39,5 +39,4 @@ public class Server
         Server server = new Server(80);
         server.beginProcess();
     }
-
 }
