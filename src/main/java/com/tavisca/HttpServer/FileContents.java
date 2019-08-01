@@ -10,7 +10,7 @@ public class FileContents {
         String contents = "";
         String str = "";
         while((str = reader.readLine()) != null) {
-            contents += str;
+            contents+=str;
         }
         return contents;
     }
