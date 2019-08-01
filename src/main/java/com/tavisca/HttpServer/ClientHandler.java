@@ -18,7 +18,7 @@ public class ClientHandler extends Thread {
         this.out = out;
     }
     //function classes objects nouns should be classnames verbs-methods
-    public void run() {
+     public void run() {
         try {
             FileHandler fh = new FileHandler("ClientHandler.log");
             log.addHandler(fh);
