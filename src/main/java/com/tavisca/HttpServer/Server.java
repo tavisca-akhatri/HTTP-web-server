@@ -18,15 +18,12 @@ public class Server
         server = new ServerSocket(port);
     }
     public void beginProcess() throws IOException {
-        Logger log = Logger.getLogger("Server");
-        FileHandler fh = new FileHandler("Server.log");
-        log.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();
-        fh.setFormatter(formatter);
-        log.info("Server started");
+        LogManager lgmgr = LogManager.getLogManager();
+        Logger log = lgmgr.getLogger(Logger.GLOBAL_LOGGER_NAME);
         // starts server and waits for a connection
+        log.log(Level.INFO,"Server started");
         while(true) {
-            log.info("Waiting for a client ...");
+            log.log(Level.INFO,"Waiting for a client ...");
             socket = server.accept();
             log.log(Level.INFO,"Client accepted");
             input = new BufferedInputStream(socket.getInputStream());
