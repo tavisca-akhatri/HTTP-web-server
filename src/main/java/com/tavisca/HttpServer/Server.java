@@ -20,14 +20,16 @@ public class Server
     public void beginProcess() throws IOException {
         LogWriter log = new LogWriter("Server");
         log.writeLog("Server started");                              // starts server and waits for a connection
+        log.writeLog("Server is listening on port: "+server.getLocalPort());
         while(true) {
             log.writeLog("Waiting for a client ...");
             socket = server.accept();
             log.writeLog("Client accepted");
             input = new BufferedInputStream(socket.getInputStream());
             output = new BufferedOutputStream(socket.getOutputStream());
-            Thread t = new ClientHandler(socket,input,output);
-            t.start();
+            Thread client = new ClientHandler(socket,input,output);
+            log.writeLog("A new Client Thread started ");
+            client.start();
         }
     }
     public static void main(String args[]) throws IOException {

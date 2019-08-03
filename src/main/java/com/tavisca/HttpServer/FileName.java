@@ -1,19 +1,23 @@
 package com.tavisca.HttpServer;
 
+import java.io.File;
+
 public class FileName {
+    private String fileName;
+
     public String getFileName(String header)
     {
-        String fileName = " ";
         if(header.split(" ")[1].length() == 1) {
-            fileName = "Server.html";
-        }
-        else if(!header.split(" ")[1].split("/")[1].equals("welcome.html"))
-        {
-            fileName = "Error.html";
+            this.fileName = "Server.html";
         }
         else{
-            fileName = header.split(" ")[1].split("/")[1];
+           this.fileName = header.split(" ")[1].split("/")[1];
         }
         return fileName;
+    }
+
+    public boolean isFileAvailable()
+    {
+        return (new File(this.fileName).exists());
     }
 }

@@ -1,23 +1,49 @@
 package com.tavisca.HttpServer;
 
-import java.io.File;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.util.Date;
 
 public class Response {
-    public String getResponse(String contents,String fileName)
+    private String responseHeader;
+    private String httpVersion;
+    private String statusCode;
+    private String serverDescription;
+    private String responseDate;
+    private String contentType;
+    private BufferedOutputStream output;
+    private String fileName;
+
+    public Response(String httpVersion, String statuscode, String serverDescription,
+                    String fileName, BufferedOutputStream out)
     {
+        this.httpVersion = httpVersion;
+        this.statusCode = statuscode;
+        this.serverDescription = serverDescription;
+        this.responseDate = new Date().toString();
+        this.contentType = (new FileContents()).getContentType(fileName);
+        this.fileName = fileName;
+        this.output = out;
+    }
+
+    public String generateHeader()
+    {
+        this.responseHeader = httpVersion+" "+statusCode+" "+"\n"+"Server: "+serverDescription
+                +"\n"+"Date : "+responseDate+"\n"+"ContentType: "+contentType+"\r\n\r\n";
+        return this.responseHeader;
+    }
+
+    public void sendResponse() throws IOException {
         String response = "";
-        if(new File(fileName).exists() && !fileName.equals("Error.html")){
-            response+="HTTP/1.1 200 OK\r\n";
+        if(this.contentType == "text/html"){
+            response = generateHeader();
+            ResponseWriter writer = new ResponseWriter();
+            writer.sendHTMLResponse(response,output,fileName);
         }
         else{
-            response+="HTTP/1.1 404 Error\r\n";
+            response = generateHeader();
+            ResponseWriter writer = new ResponseWriter();
+            writer.sendImageResponse(response,output,fileName);
         }
-        response+="Server: My Java HTTP Server: 1.0\r\n";
-        response+=new Date().toString()+"\r\n";
-        response+="Content-type: text/html\r\n";
-        response+="Content-Length:"+contents.length() + "\r\n";
-        response+="\r\n";
-        return response;
     }
 }

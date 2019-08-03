@@ -16,8 +16,7 @@ public class LogWriter
          SimpleFormatter formatter = new SimpleFormatter();
          fh.setFormatter(formatter);
     }
-    public void writeLog(String message)
-    {
+    public void writeLog(String message) {
         this.logger.info(message);
     }
 }
