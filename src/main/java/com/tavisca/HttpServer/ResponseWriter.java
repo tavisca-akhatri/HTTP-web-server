@@ -5,7 +5,7 @@ import java.io.*;
 public class ResponseWriter {/*String fileName*/
     public void sendHTMLResponse(String httpResponse, BufferedOutputStream out ,String fileName) throws IOException {
         String contents = new FileContents().getFileContents(fileName);
-        httpResponse+=contents;
+        httpResponse += contents;
         out.write(httpResponse.getBytes());
         out.flush();
     }
@@ -25,7 +25,5 @@ public class ResponseWriter {/*String fileName*/
         }catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }
